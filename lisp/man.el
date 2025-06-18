@@ -124,8 +124,8 @@ man command is piped through each command filter in the order the
 commands appear in the association list.  The final output is placed in
 the manpage buffer."
   :type '(repeat (list (string :tag "Command String")
-		       (repeat :inline t
-			       (string :tag "Phrase String"))))
+                       (repeat :inline t
+                               (string :tag "Phrase String"))))
   :group 'man)
 
 (defvar Man-uses-untabify-flag t
@@ -190,8 +190,8 @@ meek       -- make no indication that the manpage is ready
 
 Any other value of `Man-notify-method' is equivalent to `meek'."
   :type '(radio (const newframe) (const pushy) (const bully)
-		(const aggressive) (const friendly) (const thrifty)
-		(const polite) (const quiet) (const meek))
+                (const aggressive) (const friendly) (const thrifty)
+                (const polite) (const quiet) (const meek))
   :group 'man)
 
 (defcustom Man-width nil
@@ -219,8 +219,8 @@ When nil, there is no limit on maximum width."
 (defcustom Man-frame-parameters nil
   "Frame parameter list for creating a new frame for a manual page."
   :type '(repeat (cons :format "%v"
-		       (symbol :tag "Parameter")
-		       (sexp :tag "Value")))
+                       (symbol :tag "Parameter")
+                       (sexp :tag "Value")))
   :group 'man)
 
 (defcustom Man-downcase-section-letters-flag t
@@ -251,7 +251,7 @@ their references which Un*x `man' does not recognize.  This
 association list is used to translate those sections, when found, to
 the associated section number."
   :type '(repeat (cons (string :tag "Bogus Section")
-		       (string :tag "Real Section")))
+                       (string :tag "Real Section")))
   :group 'man)
 
 ;; FIXME see comments at ffap-c-path.
@@ -331,9 +331,9 @@ If this is nil, `man' will use `locale-coding-system'."
 (defvar Man-page-header-regexp
   (if (string-match "-solaris2\\." system-configuration)
       (concat "^[-[:alnum:]_].*[ \t]\\(" Man-name-regexp
-	      "(\\(" Man-section-regexp "\\))\\)$")
+              "(\\(" Man-section-regexp "\\))\\)$")
     (concat "^[ \t]*\\(" Man-name-regexp
-	    "(\\(" Man-section-regexp "\\))\\).*\\1"))
+            "(\\(" Man-section-regexp "\\))\\).*\\1"))
   "Regular expression describing the heading of a page.")
 
 (defvar Man-heading-regexp "^\\([[:upper:]][[:upper:]0-9 /-]+\\)$"
@@ -352,8 +352,8 @@ This regular expression should start with a `^' character.")
 
 (defvar Man-reference-regexp
   (concat "\\(" Man-name-regexp
-	  "\\(\\([-‐]\n\\)?[ \t]+" Man-name-regexp "\\)*\\)[ \t]*(\\("
-	  Man-section-regexp "\\))")
+          "\\(\\([-‐]\n\\)?[ \t]+" Man-name-regexp "\\)*\\)[ \t]*(\\("
+          Man-section-regexp "\\))")
   "Regular expression describing a reference to another manpage.")
 
 (defvar Man-apropos-regexp
@@ -434,25 +434,25 @@ Otherwise, the value is whatever the function
 
 (defconst Man-sysv-sed-script "\
 /\b/ {	s/_\b//g
-	s/\b_//g
+        s/\b_//g
         s/o\b+/o/g
         s/+\bo/o/g
-	:ovstrk
-	s/\\(.\\)\b\\1/\\1/g
-	t ovstrk
-	}
+        :ovstrk
+        s/\\(.\\)\b\\1/\\1/g
+        t ovstrk
+        }
 /\e\\[[0-9][0-9]*m/ s///g"
   "Script for sysV-like sed to nuke backspaces and ANSI codes from manpages.")
 
 (defconst Man-berkeley-sed-script "\
 /\b/ {	s/_\b//g\\
-	s/\b_//g\\
+        s/\b_//g\\
         s/o\b+/o/g\\
         s/+\bo/o/g\\
-	:ovstrk\\
-	s/\\(.\\)\b\\1/\\1/g\\
-	t ovstrk\\
-	}\\
+        :ovstrk\\
+        s/\\(.\\)\b\\1/\\1/g\\
+        t ovstrk\\
+        }\\
 /\e\\[[0-9][0-9]*m/ s///g"
   "Script for berkeley-like sed to nuke backspaces and ANSI codes from manpages.")
 
@@ -518,10 +518,10 @@ Otherwise, the value is whatever the function
     (funcall
      (button-get button 'func)
      (cond ((null target)
-	    (button-label button))
-	   ((functionp target)
-	    (funcall target (button-start button)))
-	   (t target)))))
+            (button-label button))
+           ((functionp target)
+            (funcall target (button-start button)))
+           (t target)))))
 
 (define-button-type 'Man-xref-man-page
   :supertype 'Man-abstract-xref-man-page
@@ -529,23 +529,23 @@ Otherwise, the value is whatever the function
 
 
 (define-button-type 'Man-xref-header-file
-    'action (lambda (button)
-              (let ((w (button-get button 'Man-target-string)))
-                (unless (Man-view-header-file w)
-                  (error "Cannot find header file: %s" w))))
-    'follow-link t
-    'help-echo "mouse-2: display this header file")
+  'action (lambda (button)
+            (let ((w (button-get button 'Man-target-string)))
+              (unless (Man-view-header-file w)
+                (error "Cannot find header file: %s" w))))
+  'follow-link t
+  'help-echo "mouse-2: display this header file")
 
 (define-button-type 'Man-xref-normal-file
   'action (lambda (button)
-	    (let ((f (concat (file-remote-p default-directory)
+            (let ((f (concat (file-remote-p default-directory)
                              (substitute-in-file-name
-		              (button-get button 'Man-target-string)))))
-	      (if (file-exists-p f)
-		  (if (file-readable-p f)
-		      (view-file f)
-		    (error "Cannot read a file: %s" f))
-		(error "Cannot find a file: %s" f))))
+                              (button-get button 'Man-target-string)))))
+              (if (file-exists-p f)
+                  (if (file-readable-p f)
+                      (view-file f)
+                    (error "Cannot read a file: %s" f))
+                (error "Cannot find a file: %s" f))))
   'follow-link t
   'help-echo "mouse-2: display this file")
 
@@ -619,86 +619,81 @@ This is necessary if one wants to dump man.el with Emacs."
   ;; Avoid possible error in call-process by using a directory that must exist.
   (let ((default-directory "/"))
     (setq Man-sed-script
-	  (cond
-	   (Man-fontify-manpage-flag
-	    nil)
-	   ((eq 0 (call-process Man-sed-command nil nil nil Man-sysv-sed-script))
-	    Man-sysv-sed-script)
-	   ((eq 0 (call-process Man-sed-command nil nil nil Man-berkeley-sed-script))
-	    Man-berkeley-sed-script)
-	   (t
-	    nil))))
+          (cond
+           (Man-fontify-manpage-flag
+            nil)
+           ((eq 0 (call-process Man-sed-command nil nil nil Man-sysv-sed-script))
+            Man-sysv-sed-script)
+           ((eq 0 (call-process Man-sed-command nil nil nil Man-berkeley-sed-script))
+            Man-berkeley-sed-script)
+           (t
+            nil))))
 
   (setq Man-filter-list
-	;; Avoid trailing nil which confuses customize.
-	(apply 'list
-	 (cons
-	  Man-sed-command
-	  (if (eq system-type 'windows-nt)
-	      ;; Windows needs ".." quoting, not '..'.
-	      (list
-	       "-e \"/Reformatting page.  Wait/d\""
-	       "-e \"/Reformatting entry.  Wait/d\""
-	       "-e \"/^[ \t][ \t]*-[ \t][0-9]*[ \t]-[ \t]*Formatted:.*[0-9]$/d\""
-	       "-e \"/^[ \t]*Page[ \t][0-9]*.*(printed[ \t][0-9\\/]*)$/d\""
-	       "-e \"/^Printed[ \t][0-9].*[0-9]$/d\""
-	       "-e \"/^[ \t]*X[ \t]Version[ \t]1[01].*Release[ \t][0-9]/d\""
-	       "-e \"/^[A-Za-z].*Last[ \t]change:/d\""
-	       "-e \"/[ \t]*Copyright [0-9]* UNIX System Laboratories, Inc.$/d\""
-	       "-e \"/^[ \t]*Rev\\..*Page [0-9][0-9]*$/d\"")
-	    (list
-	     (if Man-sed-script
-		 (concat "-e '" Man-sed-script "'")
-	       "")
-             (if (eq system-type 'darwin)
-                 ;; macOS Sed doesn't support \o notation.
-                 "-e '/^[[:cntrl:]][[:cntrl:]]*$/d'"
-               ;; Use octal numbers.  Otherwise, \032 (Ctrl-Z) would
-               ;; suspend remote connections.
-	       "-e '/^[\\o001-\\o032][\\o001-\\o032]*$/d'")
-	     "-e '/\e[789]/s///g'"
-	     "-e '/Reformatting page.  Wait/d'"
-	     "-e '/Reformatting entry.  Wait/d'"
-	     "-e '/^[ \t]*Hewlett-Packard[ \t]Company[ \t]*-[ \t][0-9]*[ \t]-/d'"
-	     "-e '/^[ \t]*Hewlett-Packard[ \t]*-[ \t][0-9]*[ \t]-.*$/d'"
-	     "-e '/^[ \t][ \t]*-[ \t][0-9]*[ \t]-[ \t]*Formatted:.*[0-9]$/d'"
-	     "-e '/^[ \t]*Page[ \t][0-9]*.*(printed[ \t][0-9\\/]*)$/d'"
-	     "-e '/^Printed[ \t][0-9].*[0-9]$/d'"
-	     "-e '/^[ \t]*X[ \t]Version[ \t]1[01].*Release[ \t][0-9]/d'"
-	     "-e '/^[A-Za-z].*Last[ \t]change:/d'"
-	     "-e '/^Sun[ \t]Release[ \t][0-9].*[0-9]$/d'"
-	     "-e '/[ \t]*Copyright [0-9]* UNIX System Laboratories, Inc.$/d'"
-	     "-e '/^[ \t]*Rev\\..*Page [0-9][0-9]*$/d'"
-	     )))
-	 ;; Windows doesn't support multi-line commands, so don't
-	 ;; invoke Awk there.
-	 (unless (eq system-type 'windows-nt)
-	   (cons
-	    Man-awk-command
-	    (list
-	     "'\n"
-	     "BEGIN { blankline=0; anonblank=0; }\n"
-	     "/^$/ { if (anonblank==0) next; }\n"
-	     "{ anonblank=1; }\n"
-	     "/^$/ { blankline++; next; }\n"
-	     "{ if (blankline>0) { print \"\"; blankline=0; } print $0; }\n"
-	     "'"
-	     )))
-	 (if (not Man-uses-untabify-flag)
-	     ;; The outer list will be stripped off by apply.
-	     (list (cons
-		    Man-untabify-command
-		    Man-untabify-command-args))
-	   )))
-)
+        ;; Avoid trailing nil which confuses customize.
+        (apply 'list
+               (cons
+                Man-sed-command
+                (if (eq system-type 'windows-nt)
+                    ;; Windows needs ".." quoting, not '..'.
+                    (list
+                     "-e \"/Reformatting page.  Wait/d\""
+                     "-e \"/Reformatting entry.  Wait/d\""
+                     "-e \"/^[ \t][ \t]*-[ \t][0-9]*[ \t]-[ \t]*Formatted:.*[0-9]$/d\""
+                     "-e \"/^[ \t]*Page[ \t][0-9]*.*(printed[ \t][0-9\\/]*)$/d\""
+                     "-e \"/^Printed[ \t][0-9].*[0-9]$/d\""
+                     "-e \"/^[ \t]*X[ \t]Version[ \t]1[01].*Release[ \t][0-9]/d\""
+                     "-e \"/^[A-Za-z].*Last[ \t]change:/d\""
+                     "-e \"/[ \t]*Copyright [0-9]* UNIX System Laboratories, Inc.$/d\""
+                     "-e \"/^[ \t]*Rev\\..*Page [0-9][0-9]*$/d\"")
+                  (list
+                   (if Man-sed-script
+                       (concat "-e '" Man-sed-script "'")
+                     "")
+                   "-e '/^[[:cntrl:]][[:cntrl:]]*$/d'"
+                   "-e '/\e[789]/s///g'"
+                   "-e '/Reformatting page.  Wait/d'"
+                   "-e '/Reformatting entry.  Wait/d'"
+                   "-e '/^[ \t]*Hewlett-Packard[ \t]Company[ \t]*-[ \t][0-9]*[ \t]-/d'"
+                   "-e '/^[ \t]*Hewlett-Packard[ \t]*-[ \t][0-9]*[ \t]-.*$/d'"
+                   "-e '/^[ \t][ \t]*-[ \t][0-9]*[ \t]-[ \t]*Formatted:.*[0-9]$/d'"
+                   "-e '/^[ \t]*Page[ \t][0-9]*.*(printed[ \t][0-9\\/]*)$/d'"
+                   "-e '/^Printed[ \t][0-9].*[0-9]$/d'"
+                   "-e '/^[ \t]*X[ \t]Version[ \t]1[01].*Release[ \t][0-9]/d'"
+                   "-e '/^[A-Za-z].*Last[ \t]change:/d'"
+                   "-e '/^Sun[ \t]Release[ \t][0-9].*[0-9]$/d'"
+                   "-e '/[ \t]*Copyright [0-9]* UNIX System Laboratories, Inc.$/d'"
+                   "-e '/^[ \t]*Rev\\..*Page [0-9][0-9]*$/d'"
+                   )))
+               ;; Windows doesn't support multi-line commands, so don't
+               ;; invoke Awk there.
+               (unless (eq system-type 'windows-nt)
+                 (cons
+                  Man-awk-command
+                  (list
+                   "'\n"
+                   "BEGIN { blankline=0; anonblank=0; }\n"
+                   "/^$/ { if (anonblank==0) next; }\n"
+                   "{ anonblank=1; }\n"
+                   "/^$/ { blankline++; next; }\n"
+                   "{ if (blankline>0) { print \"\"; blankline=0; } print $0; }\n"
+                   "'"
+                   )))
+               (if (not Man-uses-untabify-flag)
+                   ;; The outer list will be stripped off by apply.
+                   (list (cons
+                          Man-untabify-command
+                          Man-untabify-command-args))
+                 )))
+  )
 
 (defsubst Man-make-page-mode-string ()
   "Formats part of the mode line for Man mode."
   (format "%s page %d of %d"
-	  (or (nth 2 (nth (1- Man-current-page) Man-page-list))
-	      "")
-	  Man-current-page
-	  (length Man-page-list)))
+          (or (nth 2 (nth (1- Man-current-page) Man-page-list))
+              "")
+          Man-current-page
+          (length Man-page-list)))
 
 (defsubst Man-build-man-command ()
   "Builds the entire background manpage and cleaning command."
@@ -718,17 +713,17 @@ This is necessary if one wants to dump man.el with Emacs."
                                    ;; them exit if/when they do.
                                    (if (eq system-type 'windows-nt)
                                        (concat " <" null-device)))))))
-	(flist Man-filter-list))
+        (flist Man-filter-list))
     (while (and flist (car flist))
       (let ((pcom (car (car flist)))
-	    (pargs (cdr (car flist))))
-	(setq command
-	      (concat command " | " pcom " "
-		      (mapconcat (lambda (phrase)
-				   (if (not (stringp phrase))
-				       (error "Malformed Man-filter-list"))
-				   phrase)
-				 pargs " ")))
+            (pargs (cdr (car flist))))
+        (setq command
+              (concat command " | " pcom " "
+                      (mapconcat (lambda (phrase)
+                                   (if (not (stringp phrase))
+                                       (error "Malformed Man-filter-list"))
+                                   phrase)
+                                 pargs " ")))
         (setq flist (cdr flist))))
     command))
 
@@ -757,31 +752,31 @@ and the `Man-section-translations-alist' variables)."
      ;; "chmod(2V)" case ?
      ((string-match (concat "^" Man-reference-regexp "$") ref)
       (setq name (replace-regexp-in-string "[\n\t ]" "" (match-string 1 ref))
-	    section (match-string 4 ref)))
+            section (match-string 4 ref)))
      ;; "2v chmod" case ?
      ((string-match (concat "^\\(" Man-section-regexp
-			    "\\) +\\(" Man-name-regexp "\\)$") ref)
+                            "\\) +\\(" Man-name-regexp "\\)$") ref)
       (setq name (match-string 2 ref)
-	    section (match-string 1 ref))))
+            section (match-string 1 ref))))
     (if (string= name "")
         ;; see Bug#66390
-	(mapconcat 'identity
+        (mapconcat 'identity
                    (mapcar #'shell-quote-argument
                            (split-string ref "\\s-+"))
                    " ")                 ; Return the reference as is
       (if Man-downcase-section-letters-flag
-	  (setq section (downcase section)))
+          (setq section (downcase section)))
       (while slist
-	(let ((s1 (car (car slist)))
-	      (s2 (cdr (car slist))))
-	  (setq slist (cdr slist))
-	  (if Man-downcase-section-letters-flag
-	      (setq s1 (downcase s1)))
-	  (if (not (string= s1 section)) nil
-	    (setq section (if Man-downcase-section-letters-flag
-			      (downcase s2)
-			    s2)
-		  slist nil))))
+        (let ((s1 (car (car slist)))
+              (s2 (cdr (car slist))))
+          (setq slist (cdr slist))
+          (if Man-downcase-section-letters-flag
+              (setq s1 (downcase s1)))
+          (if (not (string= s1 section)) nil
+            (setq section (if Man-downcase-section-letters-flag
+                              (downcase s2)
+                            s2)
+                  slist nil))))
       (concat Man-specified-section-option section " " name))))
 
 (defun Man-support-local-filenames ()
@@ -790,26 +785,26 @@ Different man programs support this feature in different ways.
 The default Debian man program (\"man-db\") has a `--local-file'
 \(or `-l') option for this purpose.  The default Red Hat man
 program has no such option, but interprets any name containing
-a \"/\" as a local filename.  The function returns either `man-db'
+a \"/\" as a local filename.  The function returns either `man-db',
 `man', or nil."
   (if (eq Man-support-local-filenames 'auto-detect)
       (with-connection-local-variables
-        (or (and (local-variable-p 'Man-support-local-filenames (current-buffer))
-                 Man-support-local-filenames)
-            (setq-connection-local
-             Man-support-local-filenames
-             (with-temp-buffer
-               (let ((default-directory (Man-default-directory)))
-                 (ignore-errors
-                   (process-file manual-program nil t nil "--help")))
-               (cond ((search-backward "--local-file" nil 'move)
-                      'man-db)
-                     ;; This feature seems to be present in at least
-                     ;; ver 1.4f, which is about 20 years old.  I
-                     ;; don't know if this version has an official
-                     ;; name?
-                     ((looking-at "^man, versione? [1-9]")
-                      'man))))))
+       (or (and (local-variable-p 'Man-support-local-filenames (current-buffer))
+                Man-support-local-filenames)
+           (setq-connection-local
+            Man-support-local-filenames
+            (with-temp-buffer
+              (let ((default-directory (Man-default-directory)))
+                (ignore-errors
+                  (process-file manual-program nil t nil "--help")))
+              (cond ((search-backward "--local-file" nil 'move)
+                     'man-db)
+                    ;; This feature seems to be present in at least
+                    ;; ver 1.4f, which is about 20 years old.  I
+                    ;; don't know if this version has an official
+                    ;; name?
+                    ((looking-at "^man, versione? [1-9]")
+                     'man))))))
     Man-support-local-filenames))
 
 
@@ -826,52 +821,52 @@ POS defaults to `point'."
       ;; The default title is the nearest entry-like object before or
       ;; after POS.
       (if (and (skip-chars-backward " \ta-zA-Z0-9+")
-	       (not (zerop (skip-chars-backward "(")))
-	       ;; Try to handle the special case where POS is on a
-	       ;; section number.
-	       (looking-at
-		(concat "([ \t]*\\(" Man-section-regexp "\\)[ \t]*)"))
-	       ;; We skipped a valid section number backwards, look at
-	       ;; preceding text.
-	       (or (and (skip-chars-backward ",; \t")
-			(not (zerop (skip-chars-backward "-a-zA-Z0-9._+:"))))
-		   ;; Not a valid entry, move POS after closing paren.
-		   (not (setq pos (match-end 0)))))
-	  ;; We have a candidate, make `start' record its starting
-	  ;; position.
-	  (setq start (point))
-	;; Otherwise look at char before POS.
-	(goto-char pos)
-	(if (not (zerop (skip-chars-backward "-a-zA-Z0-9._+:")))
-	    ;; Our candidate is just before or around POS.
-	    (setq start (point))
-	  ;; Otherwise record the current column and look backwards.
-	  (setq column (current-column))
-	  (skip-chars-backward ",; \t")
-	  ;; Record the distance traveled.
-	  (setq distance (- column (current-column)))
-	  (when (looking-back
-		 (concat "([ \t]*\\(?:" Man-section-regexp "\\)[ \t]*)")
+               (not (zerop (skip-chars-backward "(")))
+               ;; Try to handle the special case where POS is on a
+               ;; section number.
+               (looking-at
+                (concat "([ \t]*\\(" Man-section-regexp "\\)[ \t]*)"))
+               ;; We skipped a valid section number backwards, look at
+               ;; preceding text.
+               (or (and (skip-chars-backward ",; \t")
+                        (not (zerop (skip-chars-backward "-a-zA-Z0-9._+:"))))
+                   ;; Not a valid entry, move POS after closing paren.
+                   (not (setq pos (match-end 0)))))
+          ;; We have a candidate, make `start' record its starting
+          ;; position.
+          (setq start (point))
+        ;; Otherwise look at char before POS.
+        (goto-char pos)
+        (if (not (zerop (skip-chars-backward "-a-zA-Z0-9._+:")))
+            ;; Our candidate is just before or around POS.
+            (setq start (point))
+          ;; Otherwise record the current column and look backwards.
+          (setq column (current-column))
+          (skip-chars-backward ",; \t")
+          ;; Record the distance traveled.
+          (setq distance (- column (current-column)))
+          (when (looking-back
+                 (concat "([ \t]*\\(?:" Man-section-regexp "\\)[ \t]*)")
                  (line-beginning-position))
-	    ;; Skip section number backwards.
-	    (goto-char (match-beginning 0))
-	    (skip-chars-backward " \t"))
-	  (if (not (zerop (skip-chars-backward "-a-zA-Z0-9._+:")))
-	      (progn
-		;; We have a candidate before POS ...
-		(setq start (point))
-		(goto-char pos)
-		(if (and (skip-chars-forward ",; \t")
-			 (< (- (current-column) column) distance)
-			 (looking-at "[-a-zA-Z0-9._+:]"))
-		    ;; ... but the one after POS is better.
-		    (setq start (point))
-		  ;; ... and anything after POS is worse.
-		  (goto-char start)))
-	    ;; No candidate before POS.
-	    (goto-char pos)
-	    (skip-chars-forward ",; \t")
-	    (setq start (point)))))
+            ;; Skip section number backwards.
+            (goto-char (match-beginning 0))
+            (skip-chars-backward " \t"))
+          (if (not (zerop (skip-chars-backward "-a-zA-Z0-9._+:")))
+              (progn
+                ;; We have a candidate before POS ...
+                (setq start (point))
+                (goto-char pos)
+                (if (and (skip-chars-forward ",; \t")
+                         (< (- (current-column) column) distance)
+                         (looking-at "[-a-zA-Z0-9._+:]"))
+                    ;; ... but the one after POS is better.
+                    (setq start (point))
+                  ;; ... and anything after POS is worse.
+                  (goto-char start)))
+            ;; No candidate before POS.
+            (goto-char pos)
+            (skip-chars-forward ",; \t")
+            (setq start (point)))))
       ;; We have found a suitable starting point, try to skip at least
       ;; one character.
       (skip-chars-forward "-a-zA-Z0-9._+:")
@@ -894,23 +889,23 @@ POS defaults to `point'."
           (or (not (eq (string-to-char (substring 1st-part -1)) ?-))
               (string-search "-" (substring 1st-part 0 -1))
               (setq word (string-replace "-" "" word))))
-	;; Make sure the section number gets included by the code below.
-	(goto-char (match-end 1)))
+        ;; Make sure the section number gets included by the code below.
+        (goto-char (match-end 1)))
       (when (string-match "[-._‐]+$" word)
-	(setq word (substring word 0 (match-beginning 0))))
+        (setq word (substring word 0 (match-beginning 0))))
       ;; The following was commented out since the preceding code
       ;; should not produce a leading "*" in the first place.
 ;;;       ;; If looking at something like *strcat(... , remove the '*'
 ;;;       (when (string-match "^*" word)
-;;; 	(setq word (substring word 1)))
-	(concat
-	 word
-	 (and (not (string-equal word ""))
-	      ;; If looking at something like ioctl(2) or brc(1M),
-	      ;; include the section number in the returned value.
-	      (looking-at
-	       (concat "[ \t]*([ \t]*\\(" Man-section-regexp "\\)[ \t]*)"))
-	      (format "(%s)" (match-string-no-properties 1)))))))
+;;;     (setq word (substring word 1)))
+      (concat
+       word
+       (and (not (string-equal word ""))
+            ;; If looking at something like ioctl(2) or brc(1M),
+            ;; include the section number in the returned value.
+            (looking-at
+             (concat "[ \t]*([ \t]*\\(" Man-section-regexp "\\)[ \t]*)"))
+            (format "(%s)" (match-string-no-properties 1)))))))
 
 
 ;; ======================================================================
@@ -961,10 +956,10 @@ foo(sec)[, bar(sec) [, ...]] [other stuff] - description"
     (while (search-forward-regexp "^\\([^ \t,\n]+\\)\\(.*?\\)\
 \\(?:[ \t]\\(([^ \t,\n]+?)\\)\\)?\\(?:[ \t]+- ?\\(.*\\)\\)?$" nil t)
       (let ((section (match-string 3))
-	    (description (match-string 4))
-	    (bound (match-end 2)))
+            (description (match-string 4))
+            (bound (match-end 2)))
         (goto-char (match-end 1))
-	(while
+        (while
             (progn
               ;; The first regexp grouping may already match the section
               ;; tacked on to the name, which is ok since for the formats we
@@ -1026,7 +1021,7 @@ foo(sec)[, bar(sec) [, ...]] [other stuff] - description"
                                         ;; the job...
                                         (shell-quote-argument prefix))))))
               (setq table (Man-parse-man-k)))))
-	;; Cache the table for later reuse.
+        ;; Cache the table for later reuse.
         (when table
           (setq Man-completion-cache (cons prefix table))))
       ;; The table may contain false positives since the match is made
@@ -1103,23 +1098,23 @@ for the current invocation."
 
   (interactive
    (list (let* ((default-entry (Man-default-man-entry))
-		;; ignore case because that's friendly for bizarre
-		;; caps things like the X11 function names and because
-		;; "man" itself is case-insensitive on the command line
-		;; so you're accustomed not to bother about the case
-		;; ("man -k" is case-insensitive similarly, so the
-		;; table has everything available to complete)
-		(completion-ignore-case t)
-		Man-completion-cache    ;Don't cache across calls.
-		(input (completing-read
-			(format-prompt "Manual entry"
+                ;; ignore case because that's friendly for bizarre
+                ;; caps things like the X11 function names and because
+                ;; "man" itself is case-insensitive on the command line
+                ;; so you're accustomed not to bother about the case
+                ;; ("man -k" is case-insensitive similarly, so the
+                ;; table has everything available to complete)
+                (completion-ignore-case t)
+                Man-completion-cache    ;Don't cache across calls.
+                (input (completing-read
+                        (format-prompt "Manual entry"
                                        (and (not (equal default-entry ""))
                                             default-entry))
                         'Man-completion-table
-			nil nil nil 'Man-topic-history default-entry)))
-	   (if (string= input "")
-	       (error "No man args given")
-	     input))))
+                        nil nil nil 'Man-topic-history default-entry)))
+           (if (string= input "")
+               (error "No man args given")
+             input))))
 
   ;; Possibly translate the "subject(section)" syntax into the
   ;; "section subject" syntax and possibly downcase the section.
@@ -1132,7 +1127,7 @@ for the current invocation."
   "Get a Un*x manual page of the item under point and put it in a buffer."
   (interactive (list (Man-default-man-entry)) man-common)
   (if (or (not man-args)
-	  (string= man-args ""))
+          (string= man-args ""))
       (error "No item under point")
     (man man-args)))
 
@@ -1155,95 +1150,95 @@ for the current invocation."
 (defmacro Man-start-calling (&rest body)
   "Start the man command in `body' after setting up the environment."
   `(let ((process-environment (copy-sequence process-environment))
-	;; The following is so Awk script gets \n intact
-	;; But don't prevent decoding of the outside.
-	(coding-system-for-write 'raw-text-unix)
-	;; We must decode the output by a coding system that the
-	;; system's locale suggests in multibyte mode.
-	(coding-system-for-read
-         (or coding-system-for-read  ; allow overriding with "C-x RET c"
-             Man-coding-system
-             locale-coding-system))
-	;; Avoid possible error by using a directory that always exists.
-	(default-directory (Man-default-directory)))
-    ;; Prevent any attempt to use display terminal fanciness.
-    (setenv "TERM" "dumb")
-    ;; In Debian Woody, at least, we get overlong lines under X
-    ;; unless COLUMNS or MANWIDTH is set.  This isn't a problem on
-    ;; a tty.  man(1) says:
-    ;;        MANWIDTH
-    ;;               If $MANWIDTH is set, its value is used as the line
-    ;;               length for which manual pages should be formatted.
-    ;;               If it is not set, manual pages will be formatted
-    ;;               with a line length appropriate to the current
-    ;;               terminal (using an ioctl(2) if available, the value
-    ;;               of $COLUMNS, or falling back to 80 characters if
-    ;;               neither is available).
-    (when (or window-system
-	      (not (or (getenv "MANWIDTH") (getenv "COLUMNS"))))
-      ;; Since the page buffer is displayed beforehand,
-      ;; we can select its window and get the window/frame width.
-      (setq-local Man-columns (Man-columns))
-      (setenv "COLUMNS" (number-to-string Man-columns)))
-    ;; Since man-db 2.4.3-1, man writes plain text with no escape
-    ;; sequences when stdout is not a tty.	In 2.5.0, the following
-    ;; env-var was added to allow control of this (see Debian Bug#340673).
-    (setenv "MAN_KEEP_FORMATTING" "1")
-    ,@body))
+         ;; The following is so Awk script gets \n intact
+         ;; But don't prevent decoding of the outside.
+         (coding-system-for-write 'raw-text-unix)
+         ;; We must decode the output by a coding system that the
+         ;; system's locale suggests in multibyte mode.
+         (coding-system-for-read
+          (or coding-system-for-read  ; allow overriding with "C-x RET c"
+              Man-coding-system
+              locale-coding-system))
+         ;; Avoid possible error by using a directory that always exists.
+         (default-directory (Man-default-directory)))
+     ;; Prevent any attempt to use display terminal fanciness.
+     (setenv "TERM" "dumb")
+     ;; In Debian Woody, at least, we get overlong lines under X
+     ;; unless COLUMNS or MANWIDTH is set.  This isn't a problem on
+     ;; a tty.  man(1) says:
+     ;;        MANWIDTH
+     ;;               If $MANWIDTH is set, its value is used as the line
+     ;;               length for which manual pages should be formatted.
+     ;;               If it is not set, manual pages will be formatted
+     ;;               with a line length appropriate to the current
+     ;;               terminal (using an ioctl(2) if available, the value
+     ;;               of $COLUMNS, or falling back to 80 characters if
+     ;;               neither is available).
+     (when (or window-system
+               (not (or (getenv "MANWIDTH") (getenv "COLUMNS"))))
+       ;; Since the page buffer is displayed beforehand,
+       ;; we can select its window and get the window/frame width.
+       (setq-local Man-columns (Man-columns))
+       (setenv "COLUMNS" (number-to-string Man-columns)))
+     ;; Since man-db 2.4.3-1, man writes plain text with no escape
+     ;; sequences when stdout is not a tty.	In 2.5.0, the following
+     ;; env-var was added to allow control of this (see Debian Bug#340673).
+     (setenv "MAN_KEEP_FORMATTING" "1")
+     ,@body))
 
 (defun Man-getpage-in-background (topic)
   "Use TOPIC to build and fire off the manpage and cleaning command.
 Return the buffer in which the manpage will appear."
   (let* ((default-directory (Man-default-directory))
          (man-args topic)
-	 (bufname
+         (bufname
           (if (file-remote-p default-directory)
               (format "*Man %s %s*" (file-remote-p default-directory) man-args)
             (format "*Man %s*" man-args)))
-	 (buffer (get-buffer bufname)))
+         (buffer (get-buffer bufname)))
     (if buffer
-	(Man-notify-when-ready buffer)
+        (Man-notify-when-ready buffer)
       (message "Invoking %s %s in the background" manual-program man-args)
       (setq buffer (generate-new-buffer bufname))
       (Man-notify-when-ready buffer)
       (with-current-buffer buffer
-	(setq buffer-undo-list t)
-	(setq Man-original-frame (selected-frame))
-	(setq Man-arguments man-args)
-	(Man-mode)
-	(setq mode-line-process
-	      (concat " " (propertize (if Man-fontify-manpage-flag
-					  "[formatting...]"
-					"[cleaning...]")
-				      'face 'mode-line-emphasis)))
-	(Man-start-calling
-	 (if (and (fboundp 'make-process)
+        (setq buffer-undo-list t)
+        (setq Man-original-frame (selected-frame))
+        (setq Man-arguments man-args)
+        (Man-mode)
+        (setq mode-line-process
+              (concat " " (propertize (if Man-fontify-manpage-flag
+                                          "[formatting...]"
+                                        "[cleaning...]")
+                                      'face 'mode-line-emphasis)))
+        (Man-start-calling
+         (if (and (fboundp 'make-process)
                   (not Man-prefer-synchronous-call))
-	     (let ((proc (start-file-process
-			  manual-program buffer
-			  (Man-shell-file-name)
-			  shell-command-switch
-			  (format (Man-build-man-command) man-args))))
-	       (set-process-sentinel proc 'Man-bgproc-sentinel)
-	       (set-process-filter proc 'Man-bgproc-filter))
-	   (let* ((inhibit-read-only t)
-		  (exit-status
-		   (process-file
+             (let ((proc (start-file-process
+                          manual-program buffer
+                          (Man-shell-file-name)
+                          shell-command-switch
+                          (format (Man-build-man-command) man-args))))
+               (set-process-sentinel proc 'Man-bgproc-sentinel)
+               (set-process-filter proc 'Man-bgproc-filter))
+           (let* ((inhibit-read-only t)
+                  (exit-status
+                   (process-file
                     (Man-shell-file-name) nil (list buffer nil) nil
-		    shell-command-switch
-		    (format (Man-build-man-command) man-args)))
-		  (msg ""))
-	     (or (and (numberp exit-status)
-		      (= exit-status 0))
-		 (and (numberp exit-status)
-		      (setq msg
-			    (format "exited abnormally with code %d"
-				    exit-status)))
-		 (setq msg exit-status))
-	     (if Man-fontify-manpage-flag
-		 (Man-fontify-manpage)
-	       (Man-cleanup-manpage))
-	     (Man-bgproc-sentinel bufname msg))))))
+                    shell-command-switch
+                    (format (Man-build-man-command) man-args)))
+                  (msg ""))
+             (or (and (numberp exit-status)
+                      (= exit-status 0))
+                 (and (numberp exit-status)
+                      (setq msg
+                            (format "exited abnormally with code %d"
+                                    exit-status)))
+                 (setq msg exit-status))
+             (if Man-fontify-manpage-flag
+                 (Man-fontify-manpage)
+               (Man-cleanup-manpage))
+             (Man-bgproc-sentinel bufname msg))))))
     buffer))
 
 (defun Man-update-manpage ()
@@ -1253,26 +1248,26 @@ Return the buffer in which the manpage will appear."
     ;;this shouldn't happen unless it is not in a Man buffer."
     (error "Man-arguments not initialized"))
   (let ((old-pos (point))
-	(text (current-word))
-	(old-size (buffer-size))
-	(inhibit-read-only t)
-	(buffer-read-only nil))
-     (erase-buffer)
-     (Man-start-calling
-      (process-file
-       (Man-shell-file-name) nil (list (current-buffer) nil) nil
-       shell-command-switch
-       (format (Man-build-man-command) Man-arguments)))
-     (if Man-fontify-manpage-flag
-	 (Man-fontify-manpage)
-       (Man-cleanup-manpage))
-     (goto-char old-pos)
-     ;;restore the point, not strictly right.
-     (unless (or (eq text nil) (= old-size (buffer-size)))
-       (let ((case-fold-search nil))
-	 (if (> old-size (buffer-size))
-	     (search-backward text nil t))
-	 (search-forward text nil t)))))
+        (text (current-word))
+        (old-size (buffer-size))
+        (inhibit-read-only t)
+        (buffer-read-only nil))
+    (erase-buffer)
+    (Man-start-calling
+     (process-file
+      (Man-shell-file-name) nil (list (current-buffer) nil) nil
+      shell-command-switch
+      (format (Man-build-man-command) Man-arguments)))
+    (if Man-fontify-manpage-flag
+        (Man-fontify-manpage)
+      (Man-cleanup-manpage))
+    (goto-char old-pos)
+    ;;restore the point, not strictly right.
+    (unless (or (eq text nil) (= old-size (buffer-size)))
+      (let ((case-fold-search nil))
+        (if (> old-size (buffer-size))
+            (search-backward text nil t))
+        (search-forward text nil t)))))
 
 (defvar Man--window-state-change-timer nil)
 
@@ -1297,7 +1292,7 @@ Return the buffer in which the manpage will appear."
   "Notify the user when MAN-BUFFER is ready.
 See the variable `Man-notify-method' for the different notification behaviors."
   (let ((saved-frame (with-current-buffer man-buffer
-		       Man-original-frame)))
+                       Man-original-frame)))
     (pcase Man-notify-method
       ('newframe
        ;; Since we run asynchronously, perhaps while Emacs is waiting
@@ -1353,21 +1348,21 @@ Same for the ANSI bold and normal escape sequences."
   (goto-char (point-min))
   ;; Fontify ANSI escapes.
   (let ((ansi-color-apply-face-function #'ansi-color-apply-text-property-face)
-	(ansi-color-basic-faces-vector Man-ansi-color-basic-faces-vector))
+        (ansi-color-basic-faces-vector Man-ansi-color-basic-faces-vector))
     (ansi-color-apply-on-region (point-min) (point-max)))
   ;; Other highlighting.
   (let ((buffer-undo-list t))
     (if (< (buffer-size) (position-bytes (point-max)))
-	;; Multibyte characters exist.
-	(progn
-	  (goto-char (point-min))
-	  (while (and (search-forward "__\b\b" nil t) (not (eobp)))
-	    (delete-char -4)
+        ;; Multibyte characters exist.
+        (progn
+          (goto-char (point-min))
+          (while (and (search-forward "__\b\b" nil t) (not (eobp)))
+            (delete-char -4)
             (put-text-property (point) (1+ (point))
                                'font-lock-face 'Man-underline))
-	  (goto-char (point-min))
-	  (while (search-forward "\b\b__" nil t)
-	    (delete-char -4)
+          (goto-char (point-min))
+          (while (search-forward "\b\b__" nil t)
+            (delete-char -4)
             (put-text-property (1- (point)) (point)
                                'font-lock-face 'Man-underline))))
     (goto-char (point-min))
@@ -1402,8 +1397,8 @@ Same for the ANSI bold and normal escape sequences."
     (goto-char (point-min))
     (while (re-search-forward Man-heading-regexp nil t)
       (put-text-property (match-beginning 0)
-			 (match-end 0)
-			 'font-lock-face 'Man-overstrike))))
+                         (match-end 0)
+                         'font-lock-face 'Man-overstrike))))
 
 (defun Man-highlight-references (&optional xref-man-type)
   "Highlight the references on mouse-over.
@@ -1418,19 +1413,19 @@ default type, `Man-xref-man-page' is used for the buttons."
     (setq Man-arguments ""))
   (if (string-match "-k " Man-arguments)
       (progn
-	(Man-highlight-references0 nil Man-reference-regexp 1
-				   'Man-default-man-entry
-				   (or xref-man-type 'Man-xref-man-page))
-	(Man-highlight-references0 nil Man-apropos-regexp 1
-				   'Man-default-man-entry
-				   (or xref-man-type 'Man-xref-man-page)))
+        (Man-highlight-references0 nil Man-reference-regexp 1
+                                   'Man-default-man-entry
+                                   (or xref-man-type 'Man-xref-man-page))
+        (Man-highlight-references0 nil Man-apropos-regexp 1
+                                   'Man-default-man-entry
+                                   (or xref-man-type 'Man-xref-man-page)))
     (Man-highlight-references0 Man-see-also-regexp Man-reference-regexp 1
-			       'Man-default-man-entry
-			       (or xref-man-type 'Man-xref-man-page))
+                               'Man-default-man-entry
+                               (or xref-man-type 'Man-xref-man-page))
     (Man-highlight-references0 Man-synopsis-regexp Man-header-regexp 0 2
-			       'Man-xref-header-file)
+                               'Man-xref-header-file)
     (Man-highlight-references0 Man-files-regexp Man-normal-file-regexp 0 0
-			       'Man-xref-normal-file)))
+                               'Man-xref-normal-file)))
 
 (defun Man-highlight-references0 (start-section regexp button-pos target type)
   ;; Based on `Man-build-references-alist'
@@ -1438,14 +1433,14 @@ default type, `Man-xref-man-page' is used for the buttons."
             ;; Section header is in this chunk.
             (Man-find-section start-section))
     (let ((end (if start-section
-		   (progn
-		     (forward-line 1)
-		     (back-to-indentation)
-		     (save-excursion
-		       (Man-next-section 1)
-		       (point)))
-		 (goto-char (point-min))
-		 nil)))
+                   (progn
+                     (forward-line 1)
+                     (back-to-indentation)
+                     (save-excursion
+                       (Man-next-section 1)
+                       (point)))
+                 (goto-char (point-min))
+                 nil)))
       (while (re-search-forward regexp end t)
         (let ((b (match-beginning button-pos))
               (e (match-end button-pos))
@@ -1454,17 +1449,17 @@ default type, `Man-xref-man-page' is used for the buttons."
           ;; "and" bit off before making a button.
           (when (string-match "\\`and +" match)
             (setq b (+ b (- (match-end 0) (match-beginning 0)))))
-	  ;; An overlay button is preferable because the underlying text
-	  ;; may have text property highlights (Bug#7881).
-	  (make-button
-	   b e
-	   'type type
-	   'Man-target-string (cond
-			       ((numberp target)
-			        (match-string target))
-			       ((functionp target)
-			        target)
-			       (t nil))))))))
+          ;; An overlay button is preferable because the underlying text
+          ;; may have text property highlights (Bug#7881).
+          (make-button
+           b e
+           'type type
+           'Man-target-string (cond
+                               ((numberp target)
+                                (match-string target))
+                               ((functionp target)
+                                target)
+                               (t nil))))))))
 
 (defun Man-cleanup-manpage (&optional interactive)
   "Remove overstriking and underlining from the current buffer.
@@ -1474,18 +1469,18 @@ script would have done them."
   (interactive "p" man-common)
   (if (or interactive (not Man-sed-script))
       (progn
-	(goto-char (point-min))
-	(while (search-forward "_\b" nil t) (delete-char -2))
-	(goto-char (point-min))
-	(while (search-forward "\b_" nil t) (delete-char -2))
-	(goto-char (point-min))
-	(while (re-search-forward "\\(.\\)\\(\b\\1\\)+" nil t)
-	  (replace-match "\\1"))
-	(goto-char (point-min))
-	(while (re-search-forward "\e\\[[0-9]+m" nil t) (replace-match ""))
-	(goto-char (point-min))
-	(while (re-search-forward "o\b\\+\\|\\+\bo" nil t) (replace-match "o"))
-	))
+        (goto-char (point-min))
+        (while (search-forward "_\b" nil t) (delete-char -2))
+        (goto-char (point-min))
+        (while (search-forward "\b_" nil t) (delete-char -2))
+        (goto-char (point-min))
+        (while (re-search-forward "\\(.\\)\\(\b\\1\\)+" nil t)
+          (replace-match "\\1"))
+        (goto-char (point-min))
+        (while (re-search-forward "\e\\[[0-9]+m" nil t) (replace-match ""))
+        (goto-char (point-min))
+        (while (re-search-forward "o\b\\+\\|\\+\bo" nil t) (replace-match "o"))
+        ))
   (goto-char (point-min))
   (while (re-search-forward "[-|]\\(\b[-|]\\)+" nil t) (replace-match "+"))
   ;; When the header is longer than the manpage name, groff tries to
@@ -1504,26 +1499,26 @@ command is run.  Second argument STRING is the entire string of output."
   (save-excursion
     (let ((Man-buffer (process-buffer process)))
       (if (not (buffer-live-p Man-buffer)) ;; deleted buffer
-	  (set-process-buffer process nil)
+          (set-process-buffer process nil)
 
-	(with-current-buffer Man-buffer
-	  (let ((inhibit-read-only t)
-	        (beg (marker-position (process-mark process))))
-	    (save-excursion
-	      (goto-char beg)
-	      (insert string)
-	      (save-restriction
-		(narrow-to-region
-		 (save-excursion
-		   (goto-char beg)
+        (with-current-buffer Man-buffer
+          (let ((inhibit-read-only t)
+                (beg (marker-position (process-mark process))))
+            (save-excursion
+              (goto-char beg)
+              (insert string)
+              (save-restriction
+                (narrow-to-region
+                 (save-excursion
+                   (goto-char beg)
                    ;; Process whole sections (Bug#36927).
                    (Man-previous-section 1)
                    (point))
-		 (point))
-		(if Man-fontify-manpage-flag
-		    (Man-fontify-manpage)
-		  (Man-cleanup-manpage)))
-	      (set-marker (process-mark process) (point-max)))))))))
+                 (point))
+                (if Man-fontify-manpage-flag
+                    (Man-fontify-manpage)
+                  (Man-cleanup-manpage)))
+              (set-marker (process-mark process) (point-max)))))))))
 
 (defun Man-bgproc-sentinel (process msg)
   "Manpage background process sentinel.
@@ -1533,63 +1528,63 @@ synchronously, PROCESS is the name of the buffer where the manpage
 command is run.  Second argument MSG is the exit message of the
 manpage command."
   (let ((Man-buffer (if (stringp process) (get-buffer process)
-		      (process-buffer process)))
-	(delete-buff nil)
-	message)
+                      (process-buffer process)))
+        (delete-buff nil)
+        message)
 
     (if (not (buffer-live-p Man-buffer)) ;; deleted buffer
-	(or (stringp process)
-	    (set-process-buffer process nil))
+        (or (stringp process)
+            (set-process-buffer process nil))
 
       (with-current-buffer Man-buffer
-	(save-excursion
-	  (let ((case-fold-search nil)
+        (save-excursion
+          (let ((case-fold-search nil)
                 (inhibit-read-only t))
-	    (goto-char (point-min))
-	    (cond ((or (looking-at "No \\(manual \\)*entry for")
-		       (looking-at "[^\n]*: nothing appropriate$"))
-		   (setq message (buffer-substring (point)
-						   (progn
-						     (end-of-line) (point)))
-			 delete-buff t))
+            (goto-char (point-min))
+            (cond ((or (looking-at "No \\(manual \\)*entry for")
+                       (looking-at "[^\n]*: nothing appropriate$"))
+                   (setq message (buffer-substring (point)
+                                                   (progn
+                                                     (end-of-line) (point)))
+                         delete-buff t))
 
-		  ;; "-k foo", successful exit, but no output (from man-db)
-		  ;; ENHANCE-ME: share the check for -k with
-		  ;; `Man-highlight-references'.  The \\s- bits here are
-		  ;; meant to allow for multiple options with -k among them.
-		  ((and (string-match "\\(\\`\\|\\s-\\)-k\\s-" Man-arguments)
-			(eq (process-status process) 'exit)
-			(= (process-exit-status process) 0)
-			(= (point-min) (point-max)))
-		   (setq message (format "%s: no matches" Man-arguments)
-			 delete-buff t))
+                  ;; "-k foo", successful exit, but no output (from man-db)
+                  ;; ENHANCE-ME: share the check for -k with
+                  ;; `Man-highlight-references'.  The \\s- bits here are
+                  ;; meant to allow for multiple options with -k among them.
+                  ((and (string-match "\\(\\`\\|\\s-\\)-k\\s-" Man-arguments)
+                        (eq (process-status process) 'exit)
+                        (= (process-exit-status process) 0)
+                        (= (point-min) (point-max)))
+                   (setq message (format "%s: no matches" Man-arguments)
+                         delete-buff t))
 
-		  ((or (stringp process)
-		       (not (and (eq (process-status process) 'exit)
-				 (= (process-exit-status process) 0))))
-		   (or (zerop (length msg))
-		       (progn
-			 (setq message
-			       (concat (buffer-name Man-buffer)
-				       ": process "
-				       (let ((eos (1- (length msg))))
-					 (if (= (aref msg eos) ?\n)
-					     (substring msg 0 eos) msg))))
-			 (goto-char (point-max))
-			 (insert (format "\nprocess %s" msg))))
-		   ))
-	    (unless delete-buff
+                  ((or (stringp process)
+                       (not (and (eq (process-status process) 'exit)
+                                 (= (process-exit-status process) 0))))
+                   (or (zerop (length msg))
+                       (progn
+                         (setq message
+                               (concat (buffer-name Man-buffer)
+                                       ": process "
+                                       (let ((eos (1- (length msg))))
+                                         (if (= (aref msg eos) ?\n)
+                                             (substring msg 0 eos) msg))))
+                         (goto-char (point-max))
+                         (insert (format "\nprocess %s" msg))))
+                   ))
+            (unless delete-buff
 
-	      (run-hooks 'Man-cooked-hook)
+              (run-hooks 'Man-cooked-hook)
 
-	      (Man-build-page-list)
-	      (Man-strip-page-headers)
-	      (Man-unindent)
-	      (Man-goto-page 1 t)
+              (Man-build-page-list)
+              (Man-strip-page-headers)
+              (Man-unindent)
+              (Man-goto-page 1 t)
 
-	      (if (not Man-page-list)
-		  (let ((args Man-arguments))
-		    (setq delete-buff t)
+              (if (not Man-page-list)
+                  (let ((args Man-arguments))
+                    (setq delete-buff t)
 
                     ;; Entries hyphenated due to the window's width
                     ;; won't be found in the man database, so remove
@@ -1597,21 +1592,21 @@ manpage command."
                     ;; either with hyphen-minus (ASCII 45, #x2d),
                     ;; hyphen (#x2010) or soft hyphen (#xad) -- and
                     ;; look again.
-		    (if (string-match "[-‐­]" args)
-			(let ((str (replace-match "" nil nil args)))
-			  (Man-getpage-in-background str))
+                    (if (string-match "[-‐­]" args)
+                        (let ((str (replace-match "" nil nil args)))
+                          (Man-getpage-in-background str))
                       (setq message (format "Can't find the %s manpage"
                                             (Man-page-from-arguments args)))))
 
-		(if Man-fontify-manpage-flag
-		    (setq message (format "%s man page formatted"
-			                  (Man-page-from-arguments Man-arguments)))
-		  (setq message (format "%s man page cleaned up"
-			                (Man-page-from-arguments Man-arguments))))
-		(unless (and (processp process)
-			     (not (eq (process-status process) 'exit)))
-		  (setq mode-line-process nil))
-		(set-buffer-modified-p nil))))))
+                (if Man-fontify-manpage-flag
+                    (setq message (format "%s man page formatted"
+                                          (Man-page-from-arguments Man-arguments)))
+                  (setq message (format "%s man page cleaned up"
+                                        (Man-page-from-arguments Man-arguments))))
+                (unless (and (processp process)
+                             (not (eq (process-status process) 'exit)))
+                  (setq mode-line-process nil))
+                (set-buffer-modified-p nil))))))
 
       (when delete-buff
         (if (window-live-p (get-buffer-window Man-buffer t))
@@ -1632,11 +1627,11 @@ manpage command."
   (mapconcat
    'identity
    (delete nil
-	   (mapcar
-	    (lambda (elem)
-	      (and (not (string-match "^-" elem))
-		   elem))
-	    (split-string args " ")))
+           (mapcar
+            (lambda (elem)
+              (and (not (string-match "^-" elem))
+                   elem))
+            (split-string args " ")))
    " "))
 
 
@@ -1688,10 +1683,10 @@ The following variables may be of some use:
 The following key bindings are currently in effect in the buffer:
 \\{Man-mode-map}"
   (setq buffer-auto-save-file-name nil
-	mode-line-buffer-identification
-	(list (default-value 'mode-line-buffer-identification)
-	      " {" 'Man-page-mode-string "}")
-	truncate-lines t)
+        mode-line-buffer-identification
+        (list (default-value 'mode-line-buffer-identification)
+              " {" 'Man-page-mode-string "}")
+        truncate-lines t)
   (buffer-disable-undo)
   (auto-fill-mode -1)
   (setq imenu-generic-expression (list (list nil Man-heading-regexp 0)))
@@ -1719,126 +1714,126 @@ The following key bindings are currently in effect in the buffer:
   (setq Man--refpages nil)
   (save-excursion
     (if (Man-find-section Man-see-also-regexp)
-	(let ((start (progn (forward-line 1) (point)))
-	      (end (progn
-		     (Man-next-section 1)
-		     (point)))
-	      hyphenated
-	      (runningpoint -1))
-	  (save-restriction
-	    (narrow-to-region start end)
-	    (goto-char (point-min))
-	    (back-to-indentation)
-	    (while (and (not (eobp)) (/= (point) runningpoint))
-	      (setq runningpoint (point))
-	      (if (re-search-forward Man-hyphenated-reference-regexp end t)
-		  (let* ((word (match-string 0))
-			 (len (1- (length word))))
-		    (if hyphenated
-			(setq word (concat hyphenated word)
-			      hyphenated nil
-			      ;; Update len, in case a reference spans
-			      ;; more than two lines (paranoia).
-			      len (1- (length word))))
-		    (if (memq (aref word len) '(?- ?­))
-			(setq hyphenated (substring word 0 len)))
-		    (and (string-match Man-reference-regexp word)
+        (let ((start (progn (forward-line 1) (point)))
+              (end (progn
+                     (Man-next-section 1)
+                     (point)))
+              hyphenated
+              (runningpoint -1))
+          (save-restriction
+            (narrow-to-region start end)
+            (goto-char (point-min))
+            (back-to-indentation)
+            (while (and (not (eobp)) (/= (point) runningpoint))
+              (setq runningpoint (point))
+              (if (re-search-forward Man-hyphenated-reference-regexp end t)
+                  (let* ((word (match-string 0))
+                         (len (1- (length word))))
+                    (if hyphenated
+                        (setq word (concat hyphenated word)
+                              hyphenated nil
+                              ;; Update len, in case a reference spans
+                              ;; more than two lines (paranoia).
+                              len (1- (length word))))
+                    (if (memq (aref word len) '(?- ?­))
+                        (setq hyphenated (substring word 0 len)))
+                    (and (string-match Man-reference-regexp word)
                          (not (member word Man--refpages))
                          (push word Man--refpages))))
-	      (skip-chars-forward " \t\n,"))))))
+              (skip-chars-forward " \t\n,"))))))
   (setq Man--refpages (nreverse Man--refpages)))
 
 (defun Man-build-page-list ()
   "Build the list of separate manpages in the buffer."
   (setq Man-page-list nil)
   (let ((page-start (point-min))
-	(page-end (point-max))
-	(header ""))
+        (page-end (point-max))
+        (header ""))
     (goto-char page-start)
     (while (not (eobp))
       (setq header
-	    (if (looking-at Man-page-header-regexp)
-		(match-string 1)
-	      nil))
+            (if (looking-at Man-page-header-regexp)
+                (match-string 1)
+              nil))
       ;; Go past both the current and the next Man-first-heading-regexp
       (if (re-search-forward Man-first-heading-regexp nil 'move 2)
-	  (let ((p (progn (beginning-of-line) (point))))
-	    ;; We assume that the page header is delimited by blank
-	    ;; lines and that it contains at most one blank line.  So
-	    ;; if we back by three blank lines we will be sure to be
-	    ;; before the page header but not before the possible
-	    ;; previous page header.
-	    (search-backward "\n\n" nil t 3)
-	    (if (re-search-forward Man-page-header-regexp p 'move)
-		(beginning-of-line))))
+          (let ((p (progn (beginning-of-line) (point))))
+            ;; We assume that the page header is delimited by blank
+            ;; lines and that it contains at most one blank line.  So
+            ;; if we back by three blank lines we will be sure to be
+            ;; before the page header but not before the possible
+            ;; previous page header.
+            (search-backward "\n\n" nil t 3)
+            (if (re-search-forward Man-page-header-regexp p 'move)
+                (beginning-of-line))))
       (setq page-end (point))
       (setq Man-page-list (append Man-page-list
-				  (list (list (copy-marker page-start)
-					      (copy-marker page-end)
-					      header))))
+                                  (list (list (copy-marker page-start)
+                                              (copy-marker page-end)
+                                              header))))
       (setq page-start page-end)
       )))
 
 (defun Man-strip-page-headers ()
   "Strip all the page headers but the first from the manpage."
   (let ((inhibit-read-only t)
-	(case-fold-search nil)
-	(header ""))
+        (case-fold-search nil)
+        (header ""))
     (dolist (page Man-page-list)
       (and (nth 2 page)
-	   (goto-char (car page))
-	   (re-search-forward Man-first-heading-regexp nil t)
-	   (setq header (buffer-substring (car page) (match-beginning 0)))
-	   ;; Since the awk script collapses all successive blank
-	   ;; lines into one, and since we don't want to get rid of
-	   ;; the fast awk script, one must choose between adding
-	   ;; spare blank lines between pages when there were none and
-	   ;; deleting blank lines at page boundaries when there were
-	   ;; some.  We choose the first, so we comment the following
-	   ;; line.
-	   ;; (setq header (concat "\n" header)))
-	   (while (search-forward header (nth 1 page) t)
-	     (replace-match ""))))))
+           (goto-char (car page))
+           (re-search-forward Man-first-heading-regexp nil t)
+           (setq header (buffer-substring (car page) (match-beginning 0)))
+           ;; Since the awk script collapses all successive blank
+           ;; lines into one, and since we don't want to get rid of
+           ;; the fast awk script, one must choose between adding
+           ;; spare blank lines between pages when there were none and
+           ;; deleting blank lines at page boundaries when there were
+           ;; some.  We choose the first, so we comment the following
+           ;; line.
+           ;; (setq header (concat "\n" header)))
+           (while (search-forward header (nth 1 page) t)
+             (replace-match ""))))))
 
 (defun Man-unindent ()
   "Delete the leading spaces that indent the manpage."
   (let ((inhibit-read-only t)
-	(case-fold-search nil))
+        (case-fold-search nil))
     (dolist (page Man-page-list)
       (let ((indent "")
-	    (nindent 0))
-	(narrow-to-region (car page) (car (cdr page)))
-	(if Man-uses-untabify-flag
-	    ;; The space characters inserted by `untabify' inherit
-	    ;; sticky text properties, which is unnecessary and looks
-	    ;; ugly with underlining (Bug#11408).
-	    (let ((text-property-default-nonsticky
-		   (cons '(face . t) text-property-default-nonsticky)))
-	      (untabify (point-min) (point-max))))
-	(if (catch 'unindent
-	      (goto-char (point-min))
-	      (if (not (re-search-forward Man-first-heading-regexp nil t))
-		  (throw 'unindent nil))
-	      (beginning-of-line)
-	      (setq indent (buffer-substring (point)
-					     (progn
-					       (skip-chars-forward " ")
-					       (point))))
-	      (setq nindent (length indent))
-	      (if (zerop nindent)
-		  (throw 'unindent nil))
-	      (setq indent (concat indent "\\|$"))
-	      (goto-char (point-min))
-	      (while (not (eobp))
-		(if (looking-at indent)
-		    (forward-line 1)
-		  (throw 'unindent nil)))
-	      (goto-char (point-min)))
-	    (while (not (eobp))
-	      (or (eolp)
-		  (delete-char nindent))
-	      (forward-line 1)))
-	))))
+            (nindent 0))
+        (narrow-to-region (car page) (car (cdr page)))
+        (if Man-uses-untabify-flag
+            ;; The space characters inserted by `untabify' inherit
+            ;; sticky text properties, which is unnecessary and looks
+            ;; ugly with underlining (Bug#11408).
+            (let ((text-property-default-nonsticky
+                   (cons '(face . t) text-property-default-nonsticky)))
+              (untabify (point-min) (point-max))))
+        (if (catch 'unindent
+              (goto-char (point-min))
+              (if (not (re-search-forward Man-first-heading-regexp nil t))
+                  (throw 'unindent nil))
+              (beginning-of-line)
+              (setq indent (buffer-substring (point)
+                                             (progn
+                                               (skip-chars-forward " ")
+                                               (point))))
+              (setq nindent (length indent))
+              (if (zerop nindent)
+                  (throw 'unindent nil))
+              (setq indent (concat indent "\\|$"))
+              (goto-char (point-min))
+              (while (not (eobp))
+                (if (looking-at indent)
+                    (forward-line 1)
+                  (throw 'unindent nil)))
+              (goto-char (point-min)))
+            (while (not (eobp))
+              (or (eolp)
+                  (delete-char nindent))
+              (forward-line 1)))
+        ))))
 
 
 ;; ======================================================================
@@ -1850,9 +1845,9 @@ The following key bindings are currently in effect in the buffer:
   (let ((case-fold-search nil)
         (start (point)))
     (if (looking-at Man-heading-regexp)
-	(forward-line 1))
+        (forward-line 1))
     (if (re-search-forward Man-heading-regexp (point-max) t n)
-	(beginning-of-line)
+        (beginning-of-line)
       (goto-char (point-max))
       ;; The last line doesn't belong to any section.
       (forward-line -1))
@@ -1865,19 +1860,19 @@ The following key bindings are currently in effect in the buffer:
   (interactive "p" man-common)
   (let ((case-fold-search nil))
     (if (looking-at Man-heading-regexp)
-	(forward-line -1))
+        (forward-line -1))
     (if (re-search-backward Man-heading-regexp (point-min) t n)
-	(beginning-of-line)
+        (beginning-of-line)
       (goto-char (point-min)))))
 
 (defun Man-find-section (section)
   "Move point to SECTION if it exists, otherwise don't move point.
 Returns t if section is found, nil otherwise."
   (let ((curpos (point))
-	(case-fold-search nil))
+        (case-fold-search nil))
     (goto-char (point-min))
     (if (re-search-forward (concat "^" section) (point-max) t)
-	(progn (beginning-of-line) t)
+        (progn (beginning-of-line) t)
       (goto-char curpos)
       nil)))
 
@@ -1906,7 +1901,7 @@ Actually the section moved to is described by `Man-see-also-regexp'."
   (interactive nil man-common)
   (if (not (Man-find-section Man-see-also-regexp))
       (error "%s" (concat "No " Man-see-also-regexp
-		     " section found in the current manpage"))))
+                          " section found in the current manpage"))))
 
 (defun Man-possibly-hyphenated-word ()
   "Return a possibly hyphenated word at point.
@@ -1919,13 +1914,13 @@ as \"tcgetp-grp(3V)\", and point is at \"grp(3V)\", we return
     (skip-syntax-backward "w()")
     (skip-chars-forward " \t")
     (let ((beg (point))
-	  (word (current-word)))
+          (word (current-word)))
       (when (eq beg (save-excursion
-		      (back-to-indentation)
-		      (point)))
-	(end-of-line 0)
-	(if (eq (char-before) ?-)
-	    (setq word (current-word))))
+                      (back-to-indentation)
+                      (point)))
+        (end-of-line 0)
+        (if (eq (char-before) ?-)
+            (setq word (current-word))))
       word)))
 
 (defvar Man--last-refpage nil)
@@ -1938,25 +1933,25 @@ Specify which REFERENCE to use; default is based on word at point."
        (error "There are no references in the current man page")
      (list
       (let* ((default (or
-		       (car (all-completions
-			     (let ((word
-				    (or (Man-possibly-hyphenated-word)
-					"")))
-			       ;; strip a trailing '-':
-			       (if (string-match "-$" word)
-				   (substring word 0
-					      (match-beginning 0))
-				 word))
-			     Man--refpages))
+                       (car (all-completions
+                             (let ((word
+                                    (or (Man-possibly-hyphenated-word)
+                                        "")))
+                               ;; strip a trailing '-':
+                               (if (string-match "-$" word)
+                                   (substring word 0
+                                              (match-beginning 0))
+                                 word))
+                             Man--refpages))
                        (if (member Man--last-refpage Man--refpages)
                            Man--last-refpage
                          (car Man--refpages))))
-	     (defaults
-	       (mapcar 'substring-no-properties
-                       (cons default Man--refpages)))
+             (defaults
+              (mapcar 'substring-no-properties
+                      (cons default Man--refpages)))
              (prompt (format-prompt "Refer to" default))
-	     (chosen (completing-read prompt Man--refpages
-				      nil nil nil nil defaults)))
+             (chosen (completing-read prompt Man--refpages
+                                      nil nil nil nil defaults)))
         chosen)))
    man-common)
   (if (not Man--refpages)
@@ -1976,21 +1971,21 @@ Specify which REFERENCE to use; default is based on word at point."
    (if (not Man-page-list)
        (error "Not a man page buffer")
      (if (= (length Man-page-list) 1)
-	 (error "You're looking at the only manpage in the buffer")
+         (error "You're looking at the only manpage in the buffer")
        (list (read-minibuffer (format "Go to manpage [1-%d]: "
                                       (length Man-page-list))))))
-    man-common)
+   man-common)
   (if (and (not Man-page-list) (not noerror))
       (error "Not a man page buffer"))
   (when Man-page-list
     (if (or (< page 1)
-	    (> page (length Man-page-list)))
-	(user-error "No manpage %d found" page))
+            (> page (length Man-page-list)))
+        (user-error "No manpage %d found" page))
     (let* ((page-range (nth (1- page) Man-page-list))
-	   (page-start (car page-range))
-	   (page-end (car (cdr page-range))))
+           (page-start (car page-range))
+           (page-end (car (cdr page-range))))
       (setq Man-current-page page
-	    Man-page-mode-string (Man-make-page-mode-string))
+            Man-page-mode-string (Man-make-page-mode-string))
       (widen)
       (goto-char page-start)
       (narrow-to-region page-start page-end)
@@ -2007,7 +2002,7 @@ Specify which REFERENCE to use; default is based on word at point."
   (if (< Man-current-page (length Man-page-list))
       (Man-goto-page (1+ Man-current-page))
     (if Man-circular-pages-flag
-	(Man-goto-page 1)
+        (Man-goto-page 1)
       (error "You're looking at the last manpage in the buffer"))))
 
 (defun Man-previous-manpage ()
@@ -2018,7 +2013,7 @@ Specify which REFERENCE to use; default is based on word at point."
   (if (> Man-current-page 1)
       (Man-goto-page (1- Man-current-page))
     (if Man-circular-pages-flag
-	(Man-goto-page (length Man-page-list))
+        (Man-goto-page (length Man-page-list))
       (error "You're looking at the first manpage in the buffer"))))
 
 ;; Header file support
