@@ -2268,6 +2268,8 @@ See also `emacs-lisp-byte-compile-and-load'."
               filename buffer-file-name))
       ;; Don't inherit lexical-binding from caller (bug#12938).
       (unless (or (local-variable-p 'lexical-binding)
+                  (and (string-suffix-p "-pkg.el" filename)
+                       (with-current-buffer input-buffer no-byte-compile))
                   bytecomp--inhibit-lexical-cookie-warning)
         (let ((byte-compile-current-buffer (current-buffer)))
           (displaying-byte-compile-warnings
